@@ -385,32 +385,6 @@ struct my_buffer{
 
 
 
-bool compare_pixels(ap_int<10> in_r, ap_int<10> in_g, ap_int<10> in_b, ap_int<10> reference_r, ap_int<10> reference_g, ap_int<10> reference_b);
-
-
-
-void import(pixel_type pixel_array[]);
-void initialise255(pixel_type pixel_array[]);
-void initialise0(int pixel_array[]);
-
-bool border_detect (int& pixel_count, unsigned int& current, volatile uint32_t* in_data, volatile uint32_t* out_data);
-
-
-
-void add_to_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_add[]);
-bool check_array(pixel_type array[], const pixel_type & in_r, const pixel_type & in_g, const pixel_type & in_b, int & position, bool skip_whites);
-
-
-int del_from_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_del[]);
-
-void pixel_check(pixel_type on_table[], pixel_type possible_candidates[], pixel_type card_presets[], int& pos_PC, int& pos_CP, int possible_candidates_count[],const pixel_type& in_r,const pixel_type& in_g,const pixel_type& in_b);
-
-
-bool gameplaying(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties);
-void resetdeck(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties);
-void snap();
-void enter_Pixel(unsigned int& current,volatile uint32_t* out_data, volatile uint32_t* in_data,pixel_type possible_candidates[],int possible_candidates_count[],pixel_type on_table[],pixel_type card_presets[]);
-
 
 /////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
@@ -443,25 +417,25 @@ bool Game_main(volatile uint32_t* in_data, volatile uint32_t* out_data, int w, i
 
 ///////////////////////////////////////////////////INITIALISATIONS//////////////////////////////////////////////////////////////////
 	/////////////////////////////ARRAYS///////////////////////////
-	pixel_type on_table[arraysize];
-	pixel_type possible_candidates[arraysize];
-	int possible_candidates_count[52];
+	// pixel_type on_table[arraysize];
+	// pixel_type possible_candidates[arraysize];
+	// int possible_candidates_count[52];
 
 	/////////////////////////////GAMEPLAYING VARIABLES AND CONSTS//////////////////////////////
-  bool detect_cards = false;
-  bool snap = false;
-	bool noroyalties = false;
-	const int numOfPixels = w*h;
-	pixel_type earliestnum=16, previousnum=15, numberofcards=0;
-	int pixelCounter;
+  // bool detect_cards = false;
+  // bool snap = false;
+	// bool noroyalties = false;
+	// const int numOfPixels = w*h;
+	// pixel_type earliestnum=16, previousnum=15, numberofcards=0;
+	// int pixelCounter;
 
 	/////////////////////////////ARRAY INITIALISATIONS//////////////////////////////
   //import(card_presets);
-  initialise255(on_table);
+  // initialise255(on_table);
 
 	/////////////////////////////COLOUR DOOOS/////////////////////////////////////////
-	unsigned int current;
-	unsigned char out;
+	// unsigned int current;
+	// unsigned char out;
 
 ///////////////////////////////////////////////////FIN INITIALISATIONS//////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -701,25 +675,25 @@ bool border_detect (int& pixel_count, unsigned int& current, volatile uint32_t* 
 
 
 
-bool check_array(pixel_type array[], const pixel_type & in_r, const pixel_type & in_g, const pixel_type & in_b, int & position, bool skip_whites){///position can't go above 255
-	position = 0;
-	while(position<arraysize){
-		if(array[position] == 255 && array[position + 1] == 255 && array[position + 2] == 255){
-			if(skip_whites){
-				position = position +3;
-			}
-			else{
-				return false;
-			}
-		}
-		else if(compare_pixels(in_r, in_g, in_b, array[position], array[position+1], array[position+2])){
-			return true;
-		}
-		else{
-			position = position + 3;
-		}
-	}
-}
+// bool check_array(pixel_type array[], const pixel_type & in_r, const pixel_type & in_g, const pixel_type & in_b, int & position, bool skip_whites){///position can't go above 255
+// 	position = 0;
+// 	while(position<arraysize){
+// 		if(array[position] == 255 && array[position + 1] == 255 && array[position + 2] == 255){
+// 			if(skip_whites){
+// 				position = position +3;
+// 			}
+// 			else{
+// 				return false;
+// 			}
+// 		}
+// 		else if(compare_pixels(in_r, in_g, in_b, array[position], array[position+1], array[position+2])){
+// 			return true;
+// 		}
+// 		else{
+// 			position = position + 3;
+// 		}
+// 	}
+// }
 
 
 
@@ -753,168 +727,168 @@ bool compare_pixels(ap_int<10> in_r, ap_int<10> in_g, ap_int<10> in_b, ap_int<10
 }
 
 
-
-//void import(pixel_type pixel_array[]){
-//  std::ifstream infile;
-//  infile.open("pixels.txt");         //////////
-//  pixel_type n;											///////////     IMPORT FUNCTION
-//  int i = 0;												///////////			NEIL
-//  while(infile >> n){								///////	///
-//    pixel_a[i] = n;
-//    i++;
-//  }
-//}
-
-void initialise255(pixel_type pixel_array[]){     //////////
-  for(int i = 0; i < arraysize; i++){									 //////////  INITIALISE 255
-    pixel_array[i] = 255;
-  }
-}
-
-void initialise0(int pixel_array[]){				//////////  INITIALISE 0
-  for(int i = 0; i < arraysize/3; i++){										/////////
-    pixel_array[i] = 0;
-  }
-}
-
-void add_to_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_add[]){
-	int i = 0;
-  while(i < arraysize){
-    if(array_add[i] == 255 && array_add[i + 1] == 255 && array_add[i + 2] == 255){
-      array_add[i] = red;
-      array_add[i + 1] = green;
-      array_add[i + 2] = blue;
-      i += arraysize;
-    }
-    else{
-      i += 3;
-    }
-  }
-}
-
-
-int del_from_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_del[]){
-  int i = 0;
- 	int z = arraysize;
-  while(i < arraysize){
-    if(array_del[i] == red && array_del[i + 1] == green && array_del[i + 2] == blue){
-      z = i;
-      array_del[i] = 255;
-      array_del[i + 1] = 255;
-      array_del[i + 2] = 255;
-      i += arraysize;
-    }
-    else if(compare_pixels(red, green, blue, array_del[i], array_del[i+1], array_del[i+2])){
-			z = i;
-      array_del[i] = 255;
-      array_del[i + 1] = 255;
-      array_del[i + 2] = 255;
-      i += arraysize;
-		}
-    else{
-      i += 3;
-    }
-  }
-  return z;
-}
-
-
-
-//////////////////////////////////////////////////////////////////GAME PLAYING ALGORITHM////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-bool gameplaying(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties){
-	if (noroyalties) {
-		if (numberofcards>0) {
-			if (presentnum == 1 || presentnum == 2 || presentnum == 3 || presentnum == 4 || presentnum == 5 || presentnum == 6 || presentnum == 7 || presentnum == 8 || presentnum == 9 || presentnum == 10) {
-				numberofcards--;
-			}
-		}
-		if (numberofcards == 0) {
-			std::cout << "no royalties ended" << std::endl;
-			//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
-			return true;
-		}
-	}
-
-	if (presentnum == previousnum) {
-		snap();
-		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
-		return true;
-	}
-	else if (presentnum == earliestnum) {
-		snap();
-		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
-		return true;
-	}
-
-	if(presentnum == 7){
-		snap();
-		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
-		return true;
-	}
-	else if(presentnum == 11){
-		noroyalties = true;
-		numberofcards = 1;
-		std::cout << "no royalties" <<std::endl;
-	}
-	else if(presentnum == 12){
-		noroyalties = true;
-		numberofcards = 2;
-		std::cout << "no royalties" <<std::endl;
-	}
-	else if(presentnum == 13){
-		noroyalties = true;
-		numberofcards = 3;
-		std::cout << "no royalties" <<std::endl;
-	}
-	else if(presentnum == 1){
-		noroyalties = true;
-		numberofcards = 4;
-		std::cout << "no royalties" <<std::endl;
-	}
-
-
-	earliestnum = previousnum;
-	previousnum = presentnum;
-  return false;
-}
-
-
-void resetdeck(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties){
-	presentnum = 14; //special values reserved. The values mean nothing
-	previousnum = 15;
-	earliestnum = 16;
-	numberofcards = 0;
-	noroyalties = false;
-}
-
-void snap(){
-	std::cout<<"snap bitches"<<std::endl;
-}
-
-
-void pixel_check(pixel_type on_table[], pixel_type possible_candidates[], pixel_type card_presets[],int& pos_PC, int& pos_CP, int possible_candidates_count[],const pixel_type& in_r,const pixel_type& in_g,const pixel_type& in_b){
-	if(check_array(on_table, in_r, in_g, in_b, pos_PC, false)){
-		//move on to next pixel, exit function
-	}
-
-	else if(check_array(possible_candidates, in_r, in_g, in_b, pos_PC, false)){
-		possible_candidates_count[pos_PC/3] = possible_candidates_count[pos_PC/3] + 1;
-	}
-
-
-	else if(check_array(card_presets, in_r, in_g, in_b, pos_CP, true)){
-		possible_candidates[pos_PC] = card_presets[pos_CP];
-		possible_candidates[pos_PC + 1]  = card_presets[pos_CP + 1];
-		possible_candidates[pos_PC + 2] = card_presets[pos_CP + 2];
-		possible_candidates_count[pos_PC/3] = possible_candidates_count[pos_PC/3] + 1;
-
-	}
-}
+//
+// //void import(pixel_type pixel_array[]){
+// //  std::ifstream infile;
+// //  infile.open("pixels.txt");         //////////
+// //  pixel_type n;											///////////     IMPORT FUNCTION
+// //  int i = 0;												///////////			NEIL
+// //  while(infile >> n){								///////	///
+// //    pixel_a[i] = n;
+// //    i++;
+// //  }
+// //}
+//
+// void initialise255(pixel_type pixel_array[]){     //////////
+//   for(int i = 0; i < arraysize; i++){									 //////////  INITIALISE 255
+//     pixel_array[i] = 255;
+//   }
+// }
+//
+// void initialise0(int pixel_array[]){				//////////  INITIALISE 0
+//   for(int i = 0; i < arraysize/3; i++){										/////////
+//     pixel_array[i] = 0;
+//   }
+// }
+//
+// void add_to_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_add[]){
+// 	int i = 0;
+//   while(i < arraysize){
+//     if(array_add[i] == 255 && array_add[i + 1] == 255 && array_add[i + 2] == 255){
+//       array_add[i] = red;
+//       array_add[i + 1] = green;
+//       array_add[i + 2] = blue;
+//       i += arraysize;
+//     }
+//     else{
+//       i += 3;
+//     }
+//   }
+// }
+//
+//
+// int del_from_Array(const pixel_type& red,const pixel_type& green,const pixel_type& blue, pixel_type array_del[]){
+//   int i = 0;
+//  	int z = arraysize;
+//   while(i < arraysize){
+//     if(array_del[i] == red && array_del[i + 1] == green && array_del[i + 2] == blue){
+//       z = i;
+//       array_del[i] = 255;
+//       array_del[i + 1] = 255;
+//       array_del[i + 2] = 255;
+//       i += arraysize;
+//     }
+//     else if(compare_pixels(red, green, blue, array_del[i], array_del[i+1], array_del[i+2])){
+// 			z = i;
+//       array_del[i] = 255;
+//       array_del[i + 1] = 255;
+//       array_del[i + 2] = 255;
+//       i += arraysize;
+// 		}
+//     else{
+//       i += 3;
+//     }
+//   }
+//   return z;
+// }
+//
+//
+//
+// //////////////////////////////////////////////////////////////////GAME PLAYING ALGORITHM////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+//
+// bool gameplaying(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties){
+// 	if (noroyalties) {
+// 		if (numberofcards>0) {
+// 			if (presentnum == 1 || presentnum == 2 || presentnum == 3 || presentnum == 4 || presentnum == 5 || presentnum == 6 || presentnum == 7 || presentnum == 8 || presentnum == 9 || presentnum == 10) {
+// 				numberofcards--;
+// 			}
+// 		}
+// 		if (numberofcards == 0) {
+// 			std::cout << "no royalties ended" << std::endl;
+// 			//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
+// 			return true;
+// 		}
+// 	}
+//
+// 	if (presentnum == previousnum) {
+// 		snap();
+// 		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
+// 		return true;
+// 	}
+// 	else if (presentnum == earliestnum) {
+// 		snap();
+// 		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
+// 		return true;
+// 	}
+//
+// 	if(presentnum == 7){
+// 		snap();
+// 		//resetdeck(earliestnum, previousnum, presentnum, numberofcards, noroyalties);
+// 		return true;
+// 	}
+// 	else if(presentnum == 11){
+// 		noroyalties = true;
+// 		numberofcards = 1;
+// 		std::cout << "no royalties" <<std::endl;
+// 	}
+// 	else if(presentnum == 12){
+// 		noroyalties = true;
+// 		numberofcards = 2;
+// 		std::cout << "no royalties" <<std::endl;
+// 	}
+// 	else if(presentnum == 13){
+// 		noroyalties = true;
+// 		numberofcards = 3;
+// 		std::cout << "no royalties" <<std::endl;
+// 	}
+// 	else if(presentnum == 1){
+// 		noroyalties = true;
+// 		numberofcards = 4;
+// 		std::cout << "no royalties" <<std::endl;
+// 	}
+//
+//
+// 	earliestnum = previousnum;
+// 	previousnum = presentnum;
+//   return false;
+// }
+//
+//
+// void resetdeck(pixel_type& earliestnum, pixel_type& previousnum, pixel_type& presentnum, pixel_type& numberofcards, bool& noroyalties){
+// 	presentnum = 14; //special values reserved. The values mean nothing
+// 	previousnum = 15;
+// 	earliestnum = 16;
+// 	numberofcards = 0;
+// 	noroyalties = false;
+// }
+//
+// void snap(){
+// 	std::cout<<"snap bitches"<<std::endl;
+// }
+//
+//
+// void pixel_check(pixel_type on_table[], pixel_type possible_candidates[], pixel_type card_presets[],int& pos_PC, int& pos_CP, int possible_candidates_count[],const pixel_type& in_r,const pixel_type& in_g,const pixel_type& in_b){
+// 	if(check_array(on_table, in_r, in_g, in_b, pos_PC, false)){
+// 		//move on to next pixel, exit function
+// 	}
+//
+// 	else if(check_array(possible_candidates, in_r, in_g, in_b, pos_PC, false)){
+// 		possible_candidates_count[pos_PC/3] = possible_candidates_count[pos_PC/3] + 1;
+// 	}
+//
+//
+// 	else if(check_array(card_presets, in_r, in_g, in_b, pos_CP, true)){
+// 		possible_candidates[pos_PC] = card_presets[pos_CP];
+// 		possible_candidates[pos_PC + 1]  = card_presets[pos_CP + 1];
+// 		possible_candidates[pos_PC + 2] = card_presets[pos_CP + 2];
+// 		possible_candidates_count[pos_PC/3] = possible_candidates_count[pos_PC/3] + 1;
+//
+// 	}
+// }
 
 void enter_Pixel(unsigned int& current, volatile uint32_t* out_data, volatile uint32_t* in_data, pixel_type possible_candidates[], int possible_candidates_count[], pixel_type on_table[], pixel_type card_presets[]){
 	/*initialise255(possible_candidates);
@@ -1016,6 +990,3 @@ void enter_Pixel(unsigned int& current, volatile uint32_t* out_data, volatile ui
 
 	}*/
 }
-
-
-
