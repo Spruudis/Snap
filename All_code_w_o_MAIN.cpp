@@ -31,7 +31,7 @@ const int w = 1920;
 
 struct my_buffer{
 
-  void initialise(volatile uint32_t* in_data){
+  void initialise(volatile uint32_t*& in_data){
 
 
     for(int j = 0; j < 2; j++){
@@ -55,10 +55,11 @@ struct my_buffer{
 
 
 
-  unsigned char get_average(volatile uint32_t* in_data){
+  unsigned int get_average(volatile uint32_t*& in_data){
     if(output_column== w){
       output_column = 0; // resets column counter
       output_row++;
+//      std::cout<<"output row++"<<std::endl;
 
       row_in = (row_in + 1) % 4;   // points to buffer to write
   		row_out_0 = (row_out_0 + 1) % 4;	//points to buffers to read
@@ -66,7 +67,10 @@ struct my_buffer{
   		row_out_2 = (row_out_2 + 1) % 4;
     }
 
+//    if(output_column == w/2 && output row = )
+
     if(output_row==0){
+
       if(output_column==0){
         L  = buff[0][row_out_1];   ////!!!! M DOESNT POINT TO THE RIGHT PIXEL AT THE START AND END
     		M  = buff[1][row_out_1];    ////// MAYBE SOVE WITH LOGIC IN THE GET_PURE FUNCTION THAT CHACKS OUTPUT COLUMN
@@ -127,6 +131,7 @@ struct my_buffer{
 
 
     else if(output_row==h-2){
+
       if(output_column==0){
         LU = buff[0][row_out_0];
         U  = buff[1][row_out_0];
@@ -201,6 +206,7 @@ struct my_buffer{
 
 
     else if(output_row==h-1){
+
       if(output_column==0){
         LU = buff[0][row_out_0];
         U  = buff[1][row_out_0];
@@ -261,16 +267,17 @@ struct my_buffer{
 
 
     else{
+//    	std::cout<<"starting row mid"<<std::endl;
       if(output_column==0){
         LU = buff[0][row_out_0];
         U  = buff[1][row_out_0];
         RU = buff[2][row_out_0];
-    		L  = buff[0][row_out_1]; //FIGURE OUT WHICH ROW_OUT IS ON WHICH LINE
-    		M  = buff[1][row_out_1]; //////I THINK ! IS ALLWAYS IN THE MIDDLE
-    		R  = buff[2][row_out_1];
+    	L  = buff[0][row_out_1]; //FIGURE OUT WHICH ROW_OUT IS ON WHICH LINE
+    	M  = buff[1][row_out_1]; //////I THINK ! IS ALLWAYS IN THE MIDDLE
+    	R  = buff[2][row_out_1];
         LD = buff[0][row_out_2];
-    		D  = buff[1][row_out_2];
-    		RD = buff[2][row_out_2];
+    	D  = buff[1][row_out_2];
+    	RD = buff[2][row_out_2];
       }
       else if(output_column==1 || output_column==w-1){
         //do nothing
@@ -341,7 +348,7 @@ struct my_buffer{
 
 
   // To be called after average
-  unsigned char get_real(){
+  unsigned int get_real(){
     if(output_column == 0){
       return L;
     }
@@ -355,18 +362,18 @@ struct my_buffer{
 
 
 
-  uchar buff[1920][4];
+  unsigned int buff[1920][4];
 
 
-  uchar LU;
-	uchar U;
-	uchar RU;
-	uchar L;
-	uchar M;
-	uchar R;
-	uchar LD;
-	uchar D;
-	uchar RD;
+  unsigned int LU;
+  unsigned int U;
+  unsigned int RU;
+  unsigned int L;
+  unsigned int M;
+  unsigned int R;
+  unsigned int LD;
+  unsigned int D;
+  unsigned int RD;
 
   uchar row_in;   // points to buffer to write
   uchar row_out_0;	//points to buffers to read
@@ -1009,6 +1016,3 @@ void enter_Pixel(unsigned int& current, volatile uint32_t* out_data, volatile ui
 
 	}*/
 }
-
-
-
